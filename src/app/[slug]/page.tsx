@@ -1,8 +1,6 @@
-"use client"
-
 import { Footer, Nav, Hero } from "@/components"
+import { CardGrid } from "@/components/card-grid/card-grid"
 import { Header } from "@/components/header/header"
-import { usePathname } from "next/navigation"
 
 const languageData = {
   japanese: {
@@ -15,7 +13,6 @@ const languageData = {
         text: "Memorize all Hiragna",
         srsUrl: "japanese-hiragana",
       },
-
       {
         title: "Katakana",
         icon: "カ",
@@ -30,14 +27,19 @@ const languageData = {
       },
     ],
   },
-  // korean: [
-  //   {
-  //     title: "Hangul",
-  //     icon: "ㅉ",
-  //     text: "Memorize the Korean Hangul",
-  //     srsUrl: "hangul",
-  //   },
-  // ],
+  korean: {
+    title: "Korean",
+    subtitle: "",
+    content: [
+      {
+        title: "Hangul",
+        icon: "ㅉ",
+        text: "Memorize the Korean Hangul",
+        srsUrl: "hangul",
+      },
+    ],
+  },
+
   // cree: [
   //   {
   //     title: "Vocabulary",
@@ -48,15 +50,22 @@ const languageData = {
   // ],
 }
 
-const getLanguageData = () => {
-  const router = usePathname()
-  const slug = router.replace("/", "")
-  console.log(languageData[slug])
+export async function generateStaticParams() {
+  // const posts = await fetch("https://.../posts").then((res) => res.json())
+
+  return Object.keys(languageData).map((language) => ({
+    slug: language,
+  }))
+}
+
+const getLanguageData = (slug: string) => {
   return languageData[slug]
 }
 
-export default function Language() {
-  const languageData = getLanguageData()
+export default function Language({ params }) {
+  const { slug } = params
+  const languageData = getLanguageData(slug)
+
   return (
     <>
       <div className="min-h-screen relative flex flex-col">
@@ -65,7 +74,7 @@ export default function Language() {
           title={languageData.title}
           subTitle={languageData.subTitle}
         ></Hero>
-        {/* <CardGrid language={languageData.content}></CardGrid> */}
+        <CardGrid data={languageData.content}></CardGrid>
         <Footer />
       </div>
     </>

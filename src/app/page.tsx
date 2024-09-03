@@ -1,4 +1,3 @@
-import React from "react"
 import styles from "./home.module.css"
 import { Nav, Footer } from "@/components"
 import Link from "next/link"
